@@ -1,0 +1,30 @@
+# this is liken to the production flow to deploy to production. 
+# Add the heroku deploy action to this for automatic deployment
+name: Build Node App
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 10.x, 12.x, 14.x ]
+
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v2
+    - name: build with node versions ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: start continuous integration
+      run: npm ci
+    - name: start build
+      run: npm run build --if-present
+    - name: start test
+      run: npm test

@@ -1,0 +1,52 @@
+name: Build Node App for Other Branches
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 10.x, 12.x, 14.x ]
+
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v2
+    - name: build with node versions ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: start continuous integration
+      run: npm ci
+    - name: start build
+      run: npm run build --if-present
+    - name: start test
+      run: npm test
+
+  quality:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: linting
+        run: bash lint-script.sh
+      - name: Lint results
+        uses: actions/upload-artifact@v1
+        with:
+          name: app
+          path: app/build/reports/lint-results-debug.html
+
+   test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: test
+        run: echo testing 
+    
