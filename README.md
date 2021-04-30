@@ -1,4 +1,10 @@
 # node-js-getting-started
+<p align="center">
+<img alt="sw-node workflow" src="https://github.com/knoxknot/sw-node/actions/workflows/main.yml/badge.svg?branch=main"/>
+<img src="https://img.shields.io/badge/Infra-Heroku-lightgrey.svg"/>
+<a href="https://docs.samuelnwoye.com"> <img src="https://img.shields.io/badge/☰-Docs-lightgrey.svg"/> </a>
+</p>
+
 
 A barebones Node.js app using [Express 4](http://expressjs.com/).
 
