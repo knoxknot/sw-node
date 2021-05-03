@@ -18,3 +18,26 @@ jobs:
       # runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!gh workflow list
+
+  quality:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: linting
+        run: bash lint-script.sh
+      - name: Lint results
+        uses: actions/upload-artifact@v1
+        with:
+          name: app
+          path: app/build/reports/lint-results-debug.html
+
+  notify:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: test
+        run: echo testing       
