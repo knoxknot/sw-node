@@ -4,8 +4,12 @@ name: Build Node App
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      deployer:
+        description: 'Deployment Officer'
+        required: true
+        default: ''
 
 jobs:
   build:
@@ -28,14 +32,16 @@ jobs:
       run: npm run build --if-present
     - name: start test
       run: npm test
+    - name: deployer
+      run: echo "Ran by ${{ github.event.inputs.deployer }}"
 
-  qualify:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
-        with:
-          languages: javascript
-      - name: Code Quality
-        uses: github/codeql-action/analyze@v1    
+  # qualify:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Initialize CodeQL
+  #       uses: github/codeql-action/init@v1
+  #       with:
+  #         languages: javascript
+  #     - name: Code Quality
+  #       uses: github/codeql-action/analyze@v1    
