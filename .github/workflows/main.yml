@@ -1,6 +1,6 @@
 # this is liken to the production flow to deploy to production. 
 # Add the heroku deploy action to this for automatic deployment
-name: Build Node App
+name: main-pipeline
 on:
   push:
     branches: [ main ]

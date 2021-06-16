@@ -1,9 +1,9 @@
-name: Build Node App for Other Branches
+name: stage-pipeline
 on:
   push:
-    branches: [ main ]
+    branches: [ stage ]
   pull_request:
-    branches: [ main ]
+    branches: [ stage ]
 
 jobs:
   build:
