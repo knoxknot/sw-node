@@ -1,13 +1,11 @@
-# this is liken to the production flow to deploy to production. 
-# Add the heroku deploy action to this for automatic deployment
 name: main-pipeline
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
     inputs:
-      image_tag:
-        description: 'Image Tag'
+      app_version:
+        description: 'The is the release tag that doubles as the image tag and application version'
         required: true
         default: ''  
 
@@ -17,24 +15,40 @@ jobs:
     steps:
     - name: checkout repository
       uses: actions/checkout@v2
-    - name: Build Application
+    
+    - name: build application
       run: |
         echo "Building the Application"
 
-  release:
-    if: success() && github.event_name == 'workflow_dispatch'
+  test:
     runs-on: ubuntu-latest
     steps:
     - name: checkout repository
       uses: actions/checkout@v2
-    - name: Deploying the Application
+    
+    - name: test application
       run: |
-        echo "Ran by ${{ github.event.inputs.deployer }}"
-        echo "Running Version ${{ github.event.inputs.image_tag }}"
-    - name: Release the Application
+        echo "Testing the Application"
+
+  release:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v2
+    
+    - name: build and push image to registry
+      run: |
+        echo "Building and Tagging Image as ${{ github.event.inputs.app_version}}"
+        echo "Pushing Image ${{ github.event.inputs.app_version}} to registry"
+    
+    - name: deploying the application
+      run: |
+        echo "Deploying Version ${{ github.event.inputs.app_version }}"
+    
+    - name: release the application
       if: success()
       run: |
-        gh release create ${{ github.event.inputs.image_tag }} -F docs/changelog/CHANGELOG-${{ github.event.inputs.image_tag }}.md
+        gh release create ${{ github.event.inputs.app_version }} -F ./docs/changelog/CHANGELOG-${{ github.event.inputs.app_version }}.md
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      ## once this runs it should trigger an on release workflow or even on release job that then deploys a live application 
