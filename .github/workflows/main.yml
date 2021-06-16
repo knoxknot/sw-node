@@ -17,12 +17,22 @@ jobs:
     steps:
     - name: checkout repository
       uses: actions/checkout@v2
-    - name: deployer
+    - name: Build Application
+      run: |
+        echo "Building the Application"
+
+  release:
+    if: success() && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v2
+    - name: Deploying the Application
       run: |
         echo "Ran by ${{ github.event.inputs.deployer }}"
         echo "Running Version ${{ github.event.inputs.image_tag }}"
     - name: Release the Application
-      if: success() && github.event_name == 'workflow_dispatch'
+      if: success()
       run: |
         gh release create ${{ github.event.inputs.image_tag }} -F docs/changelog/CHANGELOG-${{ github.event.inputs.image_tag }}.md
       env:
