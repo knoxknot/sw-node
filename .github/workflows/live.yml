@@ -2,7 +2,7 @@ name: live-application
 
 on:
   release:
-    types: [created]
+    types: [created,published]
 
 jobs:
   release_app:
