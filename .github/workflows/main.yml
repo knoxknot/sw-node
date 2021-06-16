@@ -14,24 +14,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [ 10.x, 12.x, 14.x ]
-
     steps:
     - name: checkout repository
       uses: actions/checkout@v2
-    # - name: build with node versions ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v1
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    # - name: start continuous integration
-    #   run: npm ci
-    # - name: start build
-    #   run: npm run build --if-present
-    # - name: start test
-    #   run: npm test
     - name: deployer
       run: |
         echo "Ran by ${{ github.event.inputs.deployer }}"
@@ -42,15 +27,4 @@ jobs:
         gh release create ${{ github.event.inputs.image_tag }} -F docs/changelog/CHANGELOG-${{ github.event.inputs.image_tag }}.md
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      ## once this runs it should trigger an on release workflow or even on release job that then deploys a live application
-
-  # qualify:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Initialize CodeQL
-  #       uses: github/codeql-action/init@v1
-  #       with:
-  #         languages: javascript
-  #     - name: Code Quality
-  #       uses: github/codeql-action/analyze@v1    
+      ## once this runs it should trigger an on release workflow or even on release job that then deploys a live application 
