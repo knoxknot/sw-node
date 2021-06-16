@@ -9,7 +9,7 @@ on:
       deployer:
         description: 'Deployment Officer'
         required: true
-        default: ''
+        default: 'Samuel'
 
 jobs:
   build:
