@@ -6,10 +6,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
     inputs:
-      deployer:
-        description: 'Deployment Officer'
-        required: true
-        default: 'Samuel'
       image_tag:
         description: 'Image Tag'
         required: true
@@ -40,6 +36,11 @@ jobs:
       run: |
         echo "Ran by ${{ github.event.inputs.deployer }}"
         echo "Running Version ${{ github.event.inputs.image_tag }}"
+    - name: Release the Application
+      run: |
+        gh release create ${{ github.event.inputs.image_tag }} -F docs/changelog/CHANGELOG-${{ github.event.inputs.image_tag }}.md
+      if: success() && github.event_name == 'workflow_dispatch'
+      ## once this runs it should trigger an on release workflow or even on release job that then deploys a live application
 
   # qualify:
   #   runs-on: ubuntu-latest

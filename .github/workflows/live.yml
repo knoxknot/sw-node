@@ -1,0 +1,16 @@
+name: live-application
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  release_app:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2 
+    - name: Application Released
+      run: echo "Application Released"
+      
+  
