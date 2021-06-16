@@ -2,12 +2,18 @@
 # Add the heroku deploy action to this for automatic deployment
 name: Build Node App
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       deployer:
         description: 'Deployment Officer'
         required: true
         default: 'Samuel'
+      image_tag:
+        description: 'Image Tag'
+        required: true
+        default: ''  
 
 jobs:
   build:
@@ -31,7 +37,9 @@ jobs:
     # - name: start test
     #   run: npm test
     - name: deployer
-      run: echo "Ran by ${{ github.event.inputs.deployer }}"
+      run: |
+        echo "Ran by ${{ github.event.inputs.deployer }}"
+        echo "Running Version ${{ github.event.inputs.image_tag }}"
 
   # qualify:
   #   runs-on: ubuntu-latest
