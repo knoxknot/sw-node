@@ -37,9 +37,11 @@ jobs:
         echo "Ran by ${{ github.event.inputs.deployer }}"
         echo "Running Version ${{ github.event.inputs.image_tag }}"
     - name: Release the Application
+      if: success() && github.event_name == 'workflow_dispatch'
       run: |
         gh release create ${{ github.event.inputs.image_tag }} -F docs/changelog/CHANGELOG-${{ github.event.inputs.image_tag }}.md
-      if: success() && github.event_name == 'workflow_dispatch'
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       ## once this runs it should trigger an on release workflow or even on release job that then deploys a live application
 
   # qualify:
